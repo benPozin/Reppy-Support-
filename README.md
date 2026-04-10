@@ -7,7 +7,8 @@ Static support pages for the **Reppy** iOS app: homepage, FAQ, privacy policy, a
 | File | Purpose |
 |------|--------|
 | `index.html` | Homepage: intro, support, feature requests, feature list, FAQ, link to privacy |
-| `privacy.html` | Privacy policy (App Store–friendly, plain language) |
+| `privacy.html` | Privacy Policy page |
+| `terms.html` | Terms of Use page |
 | `404.html` | “Page not found” (used automatically on Vercel for missing URLs) |
 | `styles.css` | All layout, typography, and theme (colors in `:root` at the top) |
 | `script.js` | Pet theme picker: click any pet with `data-pet-theme` → updates `html[data-theme]` + `localStorage` |
@@ -53,7 +54,7 @@ There is **no build step** — Vercel serves the files as-is.
 
 ## Pet color themes
 
-Click any pet image (or a pet card in “Your gym buddies”) to switch the whole site to that element’s palette (flame, water, air, earth, lightning). The choice is saved in **`localStorage`** as `reppy-support-theme` and restored on `privacy.html` and `404.html` too. To change theme keys or colors, edit **`styles.css`** (`html[data-theme="…"]` blocks) and **`script.js`** (`THEMES` + `THEME_COLORS`).
+Click any pet image (or a pet card in “Your gym buddies”) to switch the whole site to that element’s palette (flame, water, air, earth, lightning). The choice is saved in **`localStorage`** as `reppy-support-theme` and restored on `privacy.html`, `terms.html`, and `404.html`. The big hero pet in the homepage header also changes to match the selected theme. To change theme keys or colors, edit **`styles.css`** (`html[data-theme="…"]` blocks) and **`script.js`** (`THEMES` + `THEME_COLORS` + `THEME_HERO_IMAGES`).
 
 ## Local preview
 

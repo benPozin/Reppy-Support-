@@ -15,6 +15,13 @@
     earth: "#1c1812",
     lightning: "#21180d"
   };
+  var THEME_HERO_IMAGES = {
+    flame: "assets/flame-reppy.png",
+    water: "assets/water-reppy.png",
+    air: "assets/air-reppy.png",
+    earth: "assets/earth-reppy.png",
+    lightning: "assets/lightning-reppy.png"
+  };
 
   function applyTheme(name) {
     if (THEMES.indexOf(name) === -1) {
@@ -29,6 +36,13 @@
     var meta = document.querySelector('meta[name="theme-color"]');
     if (meta) {
       meta.setAttribute("content", THEME_COLORS[name] || THEME_COLORS.flame);
+    }
+    var hero = document.querySelector(".pet--hero");
+    if (hero) {
+      var src = THEME_HERO_IMAGES[name] || THEME_HERO_IMAGES.flame;
+      hero.setAttribute("src", src);
+      hero.setAttribute("alt", "Reppy " + name + " elemental pet");
+      hero.setAttribute("data-pet-theme", name);
     }
   }
 

@@ -212,6 +212,7 @@ body {
   width: 96px;
   filter: drop-shadow(0 6px 20px var(--pet-shadow-hero));
   transition: filter 0.3s ease;
+  animation: pet-float 3.6s ease-in-out infinite;
 }
 
 @media (min-width: 600px) {
@@ -235,7 +236,13 @@ body {
   width: 56px;
   opacity: 0.95;
   transition: transform 0.15s ease, opacity 0.15s ease;
+  animation: pet-bob 2.8s ease-in-out infinite;
 }
+
+.pet-parade .pet:nth-child(2) { animation-delay: 0.2s; }
+.pet-parade .pet:nth-child(3) { animation-delay: 0.4s; }
+.pet-parade .pet:nth-child(4) { animation-delay: 0.6s; }
+.pet-parade .pet:nth-child(5) { animation-delay: 0.8s; }
 
 .pet-parade .pet:hover {
   transform: translateY(-3px) scale(1.06);
@@ -386,6 +393,10 @@ body {
   text-align: center;
   box-shadow: 0 4px 24px var(--surface-glow);
   transition: border-color 0.15s ease, transform 0.15s ease;
+}
+
+.pet-card .pet {
+  animation: pet-bob 2.6s ease-in-out infinite;
 }
 
 .pet-card:hover {
@@ -597,6 +608,13 @@ a:hover {
   margin-top: var(--space-sm);
 }
 
+.btn-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+  margin-top: var(--space-sm);
+}
+
 /* Footer */
 .site-footer {
   margin-top: auto;
@@ -697,6 +715,39 @@ a:hover {
   border-top: 1px solid var(--border);
 }
 
+.legal-tabs {
+  display: inline-flex;
+  gap: var(--space-xs);
+  padding: 0.3rem;
+  margin-bottom: var(--space-lg);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--surface);
+}
+
+.legal-tab {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.4rem 0.9rem;
+  border-radius: 999px;
+  text-decoration: none;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  border: 1px solid transparent;
+}
+
+.legal-tab:hover {
+  color: var(--accent-bright);
+}
+
+.legal-tab[aria-current="page"] {
+  color: var(--accent-bright);
+  background: var(--accent-subtle);
+  border-color: var(--accent-dim);
+}
+
 .legal-back a {
   font-weight: 500;
 }
@@ -758,4 +809,14 @@ body:not(.page-404) {
 
 body:not(.page-404) main {
   flex: 1;
+}
+
+@keyframes pet-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
+@keyframes pet-bob {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
 }
