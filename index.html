@@ -11,8 +11,24 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet">
 </head>
-<body>
+<body class="page-home">
+  <noscript>
+    <style>#intro-overlay{display:none!important}</style>
+  </noscript>
   <a class="skip-link" href="#main">Skip to content</a>
+
+  <!-- EDIT: Homepage intro — spinning pet ring + particle burst (see script.js initIntro) -->
+  <div id="intro-overlay" class="intro-overlay" role="dialog" aria-modal="true" aria-label="Reppy welcome animation">
+    <button type="button" class="intro-skip btn btn--ghost">Skip intro</button>
+    <div class="intro-orbit intro-orbit--spin" aria-hidden="true">
+      <img class="intro-orbit-pet pet" src="assets/flame-reppy.png" width="64" height="64" alt="">
+      <img class="intro-orbit-pet pet" src="assets/water-reppy.png" width="64" height="64" alt="">
+      <img class="intro-orbit-pet pet" src="assets/air-reppy.png" width="64" height="64" alt="">
+      <img class="intro-orbit-pet pet" src="assets/earth-reppy.png" width="64" height="64" alt="">
+      <img class="intro-orbit-pet pet" src="assets/lightning-reppy.png" width="64" height="64" alt="">
+    </div>
+    <canvas id="intro-particle-canvas" class="intro-particle-canvas" aria-hidden="true"></canvas>
+  </div>
 
   <!-- EDIT: Site header: title, tagline, hero pet, and parade (swap images in assets/ if needed) -->
   <header class="site-header">

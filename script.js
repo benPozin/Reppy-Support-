@@ -76,6 +76,144 @@
     applyTheme(name);
   }
 
+  function runParticleBurst(canvas) {
+    if (!canvas || !canvas.getContext) {
+      return;
+    }
+    var ctx = canvas.getContext("2d");
+    if (!ctx) {
+      return;
+    }
+    var dpr = window.devicePixelRatio || 1;
+    var w = window.innerWidth;
+    var h = window.innerHeight;
+    canvas.width = Math.floor(w * dpr);
+    canvas.height = Math.floor(h * dpr);
+    canvas.style.width = w + "px";
+    canvas.style.height = h + "px";
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+    var root = getComputedStyle(document.documentElement);
+    var accent = root.getPropertyValue("--accent").trim() || "#ff8c42";
+    var bright = root.getPropertyValue("--accent-bright").trim() || "#ffb86b";
+    var dim = root.getPropertyValue("--accent-dim").trim() || "#c45c1c";
+    var colors = [accent, bright, dim, "#ffffff"];
+
+    var cx = w * 0.5;
+    var cy = h * 0.48;
+    var particles = [];
+    var i;
+    var n = 380;
+    for (i = 0; i < n; i++) {
+      var ang = Math.random() * Math.PI * 2;
+      var spd = 3.5 + Math.random() * 10;
+      particles.push({
+        x: cx + (Math.random() - 0.5) * 40,
+        y: cy + (Math.random() - 0.5) * 40,
+        vx: Math.cos(ang) * spd,
+        vy: Math.sin(ang) * spd - 1.2,
+        life: 0.92 + Math.random() * 0.08,
+        decay: 0.008 + Math.random() * 0.006,
+        size: 1.5 + Math.random() * 2.8,
+        color: colors[Math.floor(Math.random() * colors.length)]
+      });
+    }
+
+    var frames = 0;
+    var maxFrames = 52;
+
+    function step() {
+      ctx.clearRect(0, 0, w, h);
+      var alive = false;
+      for (i = 0; i < particles.length; i++) {
+        var p = particles[i];
+        if (p.life <= 0) {
+          continue;
+        }
+        alive = true;
+        p.x += p.vx;
+        p.y += p.vy;
+        p.vy += 0.11;
+        p.vx *= 0.985;
+        p.life -= p.decay;
+        ctx.globalAlpha = Math.max(0, Math.min(1, p.life));
+        ctx.fillStyle = p.color;
+        ctx.fillRect(p.x, p.y, p.size, p.size);
+      }
+      ctx.globalAlpha = 1;
+      frames++;
+      if (alive && frames < maxFrames) {
+        requestAnimationFrame(step);
+      }
+    }
+    requestAnimationFrame(step);
+  }
+
+  function initIntro() {
+    var overlay = document.getElementById("intro-overlay");
+    if (!overlay || !document.body.classList.contains("page-home")) {
+      return;
+    }
+
+    var reduced = window.matchMedia("(prefers-reduced-motion: reduce)");
+    if (reduced.matches) {
+      overlay.remove();
+      return;
+    }
+
+    var canvas = document.getElementById("intro-particle-canvas");
+    var skipBtn = overlay.querySelector(".intro-skip");
+    var spinMs = 650;
+    var burstHoldMs = 480;
+    var exitMs = 340;
+    var tSpin;
+    var tBurst;
+    var finished = false;
+
+    function cleanupOverlay() {
+      if (finished) {
+        return;
+      }
+      finished = true;
+      clearTimeout(tSpin);
+      clearTimeout(tBurst);
+      overlay.classList.add("intro-overlay--exit");
+      document.body.classList.remove("intro-active");
+      setTimeout(function () {
+        if (overlay.parentNode) {
+          overlay.parentNode.removeChild(overlay);
+        }
+      }, exitMs);
+    }
+
+    function startBurst() {
+      if (finished) {
+        return;
+      }
+      overlay.classList.add("intro-overlay--burst");
+      runParticleBurst(canvas);
+      tBurst = setTimeout(cleanupOverlay, burstHoldMs);
+    }
+
+    document.body.classList.add("intro-active");
+    if (skipBtn) {
+      skipBtn.focus();
+    }
+
+    if (skipBtn) {
+      skipBtn.addEventListener("click", cleanupOverlay);
+    }
+
+    document.addEventListener("keydown", function onEsc(e) {
+      if (e.key === "Escape" && overlay.parentNode) {
+        document.removeEventListener("keydown", onEsc);
+        cleanupOverlay();
+      }
+    });
+
+    tSpin = setTimeout(startBurst, spinMs);
+  }
+
   function init() {
     restoreTheme();
 
@@ -92,6 +230,8 @@
       event.preventDefault();
       applyTheme(name);
     });
+
+    initIntro();
   }
 
   if (document.readyState === "loading") {

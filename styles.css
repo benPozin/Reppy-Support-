@@ -820,3 +820,113 @@ body:not(.page-404) main {
   0%, 100% { transform: translateY(0); }
   50% { transform: translateY(-4px); }
 }
+
+/* Homepage intro: one rotating ring (whole group spins together) */
+.intro-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9998;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg);
+  background-image:
+    radial-gradient(ellipse 130% 90% at 50% -35%, var(--grad-1), transparent 55%),
+    radial-gradient(ellipse 50% 45% at 110% 20%, var(--grad-2), transparent),
+    radial-gradient(ellipse 40% 35% at -10% 60%, var(--grad-3), transparent);
+  transition: opacity 0.32s ease, visibility 0.32s ease;
+}
+
+body.intro-active {
+  overflow: hidden;
+}
+
+.intro-skip {
+  position: absolute;
+  top: var(--space-lg);
+  right: var(--space-lg);
+  z-index: 10001;
+  margin-top: 0;
+}
+
+.btn--ghost {
+  background: transparent;
+  color: var(--text-muted);
+  border-color: var(--border);
+}
+
+.btn--ghost:hover {
+  color: var(--accent-bright);
+  border-color: var(--accent-dim);
+  background: var(--accent-subtle);
+}
+
+.intro-orbit {
+  --orbit-r: min(32vw, 130px);
+  position: relative;
+  width: min(88vw, 340px);
+  height: min(88vw, 340px);
+  flex-shrink: 0;
+}
+
+.intro-orbit--spin {
+  animation: intro-orbit-spin 0.65s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+@keyframes intro-orbit-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.intro-orbit-pet {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 64px;
+  height: auto;
+  margin: -32px 0 0 -32px;
+  transform: rotate(var(--angle)) translateY(calc(-1 * var(--orbit-r))) rotate(calc(-1 * var(--angle)));
+  pointer-events: none;
+}
+
+.intro-orbit-pet:nth-child(1) { --angle: 0deg; }
+.intro-orbit-pet:nth-child(2) { --angle: 72deg; }
+.intro-orbit-pet:nth-child(3) { --angle: 144deg; }
+.intro-orbit-pet:nth-child(4) { --angle: 216deg; }
+.intro-orbit-pet:nth-child(5) { --angle: 288deg; }
+
+.intro-overlay--burst .intro-orbit {
+  opacity: 0;
+  transition: opacity 0.12s ease-out;
+}
+
+.intro-particle-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.08s ease-out;
+}
+
+.intro-overlay--burst .intro-particle-canvas {
+  opacity: 1;
+}
+
+.intro-overlay--exit {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .intro-orbit--spin {
+    animation: none;
+    transform: rotate(0deg);
+  }
+}
